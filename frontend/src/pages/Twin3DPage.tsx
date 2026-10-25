@@ -162,7 +162,7 @@ export const Twin3DPage: React.FC = () => {
 
       {/* ── Active Domain Card on Building Click (Exact Replicate of Inter-Domain Causal Flow Architecture) ── */}
       {selectedAsset && activeDomainNode && (
-        <div className="absolute top-4 right-4 z-40 w-[350px] max-w-[calc(100vw-2rem)] flex flex-col gap-2 animate-in fade-in slide-in-from-right-4 duration-300 pointer-events-auto">
+        <div className="absolute top-14 sm:top-4 right-2 sm:right-4 left-2 sm:left-auto sm:w-[350px] max-w-[calc(100vw-1rem)] sm:max-w-[360px] z-40 flex flex-col gap-2 animate-in fade-in slide-in-from-right-4 duration-300 pointer-events-auto">
           {/* Top facility title header bar with close button */}
           <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-[#071326] border border-[#1e3a5f] shadow-xl">
             <div className="flex items-center gap-2 min-w-0">
@@ -213,7 +213,8 @@ export const Twin3DPage: React.FC = () => {
               setInspectorDomainId(domId);
             }}
             style={{
-              width: '350px',
+              width: '100%',
+              maxWidth: '350px',
               backgroundColor: '#071326'
             }}
           />

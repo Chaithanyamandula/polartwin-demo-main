@@ -1083,16 +1083,15 @@ const TreatmentProcessFlow: React.FC<{
         </div>
 
         {/* KPI strip */}
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           {kpis.map((k, i) => (
-            <div key={k.label} className="px-3 py-1.5 rounded-lg text-center"
+            <div key={k.label} className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-center"
               style={{
                 background: `${k.color}0d`,
                 border: `1px solid ${k.color}22`,
-                marginLeft: i > 0 ? 4 : 0,
               }}>
               <div className="text-[7px] font-mono text-slate-500 uppercase tracking-[0.2em]">{k.label}</div>
-              <div className="text-[12px] font-black font-mono mt-0.5" style={{ color: k.color }}>{k.value}</div>
+              <div className="text-[11px] sm:text-[12px] font-black font-mono mt-0.5" style={{ color: k.color }}>{k.value}</div>
             </div>
           ))}
         </div>

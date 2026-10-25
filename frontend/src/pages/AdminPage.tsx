@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { adminApi } from '../api/client';
 import { ShieldAlert, Users, Cpu, Play, RefreshCw, CheckCircle2, Settings, Key } from 'lucide-react';
 
@@ -40,16 +40,16 @@ export const AdminPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="glass-panel p-6 rounded-2xl border border-polar-border">
-        <div className="flex items-center space-x-3">
-          <div className="p-3 bg-purple-500/20 text-purple-400 rounded-xl border border-purple-500/30">
-            <ShieldAlert className="w-6 h-6" />
+      <div className="glass-panel p-4 sm:p-6 rounded-2xl border border-polar-border">
+        <div className="flex items-start sm:items-center space-x-3">
+          <div className="p-2.5 sm:p-3 bg-purple-500/20 text-purple-400 rounded-xl border border-purple-500/30 flex-shrink-0">
+            <ShieldAlert className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div>
-            <div className="text-xs font-mono text-purple-400 uppercase tracking-wider">
+            <div className="text-[10px] sm:text-xs font-mono text-purple-400 uppercase tracking-wider">
               System Administration & Core Parameters
             </div>
-            <h1 className="text-2xl font-black text-white">
+            <h1 className="text-xl sm:text-2xl font-black text-white">
               POLARTWIN Security & Governance Console
             </h1>
             <p className="text-xs text-slate-300 mt-0.5">
@@ -60,16 +60,16 @@ export const AdminPage: React.FC = () => {
       </div>
 
       {tickStatus && (
-        <div className="p-4 bg-emerald-950/60 border border-emerald-500/40 rounded-xl text-xs text-emerald-300 flex items-center space-x-2 font-mono">
+        <div className="p-3.5 sm:p-4 bg-emerald-950/60 border border-emerald-500/40 rounded-xl text-xs text-emerald-300 flex items-center space-x-2 font-mono">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
           <span>{tickStatus}</span>
         </div>
       )}
 
       {/* Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* User Management */}
-        <div className="glass-panel rounded-2xl border border-polar-border p-6">
+        <div className="glass-panel rounded-2xl border border-polar-border p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Users className="w-4 h-4 text-cyan-400" />
@@ -85,12 +85,12 @@ export const AdminPage: React.FC = () => {
               <div className="text-xs text-slate-400 font-mono">Loading users...</div>
             ) : (
               users.map((u) => (
-                <div key={u.user_id} className="p-3.5 rounded-xl bg-polar-dark/80 border border-polar-border flex items-center justify-between text-xs">
-                  <div>
-                    <div className="font-bold text-white font-mono">{u.email}</div>
+                <div key={u.user_id} className="p-3 rounded-xl bg-polar-dark/80 border border-polar-border flex items-center justify-between text-xs gap-2">
+                  <div className="min-w-0">
+                    <div className="font-bold text-white font-mono truncate">{u.email}</div>
                     <div className="text-[10px] text-slate-500 font-mono">ID: {u.user_id.slice(0, 16)}...</div>
                   </div>
-                  <span className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold uppercase border ${
+                  <span className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold uppercase border flex-shrink-0 ${
                     u.role === 'admin' ? 'bg-purple-500/20 text-purple-300 border-purple-500/40' :
                     u.role === 'operator' ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40' :
                     'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
@@ -104,7 +104,7 @@ export const AdminPage: React.FC = () => {
         </div>
 
         {/* Simulation Engine Controls */}
-        <div className="glass-panel rounded-2xl border border-polar-border p-6 flex flex-col justify-between">
+        <div className="glass-panel rounded-2xl border border-polar-border p-4 sm:p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-2">
@@ -141,11 +141,11 @@ export const AdminPage: React.FC = () => {
 
           <div className="mt-6 pt-4 border-t border-polar-border/60">
             <div className="text-[11px] font-mono text-slate-400 mb-2 uppercase">Manual Step Triggers:</div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
               <button
                 onClick={() => handleManualTick('maitri')}
                 disabled={ticking}
-                className="py-2.5 px-3 bg-polar-navy hover:bg-polar-border border border-polar-border rounded-xl text-xs font-mono font-bold text-cyan-300 transition-colors flex items-center justify-center space-x-1.5"
+                className="py-2.5 px-3 bg-polar-navy hover:bg-polar-border border border-polar-border rounded-xl text-xs font-mono font-bold text-cyan-300 transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>Step Maitri (+1 Tick)</span>
@@ -154,7 +154,7 @@ export const AdminPage: React.FC = () => {
               <button
                 onClick={() => handleManualTick('bharati')}
                 disabled={ticking}
-                className="py-2.5 px-3 bg-polar-navy hover:bg-polar-border border border-polar-border rounded-xl text-xs font-mono font-bold text-cyan-300 transition-colors flex items-center justify-center space-x-1.5"
+                className="py-2.5 px-3 bg-polar-navy hover:bg-polar-border border border-polar-border rounded-xl text-xs font-mono font-bold text-cyan-300 transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
               >
                 <Play className="w-3.5 h-3.5 fill-current" />
                 <span>Step Bharati (+1 Tick)</span>

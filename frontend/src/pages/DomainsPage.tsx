@@ -737,21 +737,21 @@ export const DomainsPage: React.FC = () => {
           >
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-4 border-b border-slate-800">
-              <div className="flex items-center gap-3">
-                <div className="p-3 rounded-2xl flex items-center justify-center shadow-lg" style={{ backgroundColor: 'rgba(6, 182, 212, 0.18)', border: '1px solid rgba(6, 182, 212, 0.45)', color: '#38bdf8' }}>
-                  <GitCompare className="w-6 h-6" />
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="p-2 sm:p-3 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0" style={{ backgroundColor: 'rgba(6, 182, 212, 0.18)', border: '1px solid rgba(6, 182, 212, 0.45)', color: '#38bdf8' }}>
+                  <GitCompare className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-wide flex items-center gap-2">
+                <div className="min-w-0">
+                  <h3 className="text-base sm:text-xl md:text-2xl font-black text-white tracking-wide flex flex-wrap items-center gap-1.5 sm:gap-2">
                     <span>Station Comparison</span>
-                    <span className="text-cyan-400 font-normal">|</span>
-                    <span className="text-teal-300">Maitri (Inland)</span>
+                    <span className="text-cyan-400 font-normal hidden sm:inline">|</span>
+                    <span className="text-teal-300 text-xs sm:text-base">Maitri</span>
                     <span className="text-xs text-slate-400 font-mono font-normal">vs</span>
-                    <span className="text-blue-400">Bharati (Coastal)</span>
+                    <span className="text-blue-400 text-xs sm:text-base">Bharati</span>
                   </h3>
-                  <p className="text-xs font-mono text-cyan-200/90 mt-1 flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                    <span>Live Digital Twin telemetry matrix across all 7 operational domains • Schirmacher Oasis vs Larsemann Hills</span>
+                  <p className="text-[11px] sm:text-xs font-mono text-cyan-200/90 mt-0.5 sm:mt-1 flex items-center gap-1.5 line-clamp-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse flex-shrink-0" />
+                    <span>Live Digital Twin telemetry matrix across operational domains</span>
                   </p>
                 </div>
               </div>

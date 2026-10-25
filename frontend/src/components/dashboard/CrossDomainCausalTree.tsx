@@ -4,7 +4,8 @@ import { useStationStore } from '../../store/stationStore';
 import { useTelemetryStore } from '../../store/telemetryStore';
 import {
   Zap, CloudSnow, Fuel, Droplet, Truck, Users, Radio, Archive,
-  ExternalLink, GitCompare, GitCommit, Brain, ChevronRight, Building2
+  ExternalLink, GitCompare, GitCommit, Brain, ChevronRight, Building2,
+  LayoutGrid, Network
 } from 'lucide-react';
 import { OperationalDomainCard } from './OperationalDomainCard';
 
@@ -216,6 +217,9 @@ export const CrossDomainCausalTree: React.FC<Props> = ({
   const snapshot = liveSnapshot[currentStationId];
 
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'cards' | 'dag'>(() => {
+    return typeof window !== 'undefined' && window.innerWidth < 1024 ? 'cards' : 'dag';
+  });
 
   // Responsive scale calculation to fit all domain cards within the external card without sliding
   const containerRef = useRef<HTMLDivElement>(null);
@@ -230,7 +234,7 @@ export const CrossDomainCausalTree: React.FC<Props> = ({
           setScale(1);
         } else {
           // Proportionally scale to viewport width so all cards are 100% visible with zero horizontal sliding
-          const s = Math.max(0.6, availableWidth / 1420);
+          const s = Math.max(0.5, availableWidth / 1420);
           setScale(s);
         }
       }
@@ -519,52 +523,103 @@ export const CrossDomainCausalTree: React.FC<Props> = ({
 
   return (
     <div
-      className="p-6 rounded-2xl relative overflow-hidden transition-all duration-300"
+      className="p-3 sm:p-5 md:p-6 rounded-2xl relative overflow-hidden transition-all duration-300"
       style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-md)' }}
     >
       {/* ── HEADER ── */}
-      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-3 mb-3" style={{ borderBottom: '1px solid var(--border)' }}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 mb-3 border-b border-[var(--border)]">
         <div>
-          <h2 className="text-lg lg:text-xl font-bold flex items-center gap-2.5 font-mono" style={{ color: 'var(--text-primary)' }}>
-            <GitCommit className="w-5 h-5" style={{ color: 'var(--accent)' }} />
+          <h2 className="text-base sm:text-lg lg:text-xl font-bold flex items-center gap-2 font-mono text-[var(--text-primary)]">
+            <GitCommit className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--accent)]" />
             <span>Dashboard</span>
           </h2>
+          <p className="text-[11px] sm:text-xs font-mono text-[var(--text-muted)] mt-0.5">
+            Operational Causal Flow & Digital Twin Domain Telemetry
+          </p>
         </div>
-        <div className="flex items-center gap-3 flex-nowrap overflow-x-auto flex-shrink-0">
+
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {/* View Mode Switcher */}
+          <div className="flex items-center rounded-xl p-0.5 sm:p-1 bg-slate-900/90 border border-slate-800 text-xs font-mono">
+            <button
+              onClick={() => setViewMode('cards')}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-xs font-medium ${
+                viewMode === 'cards'
+                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Cards</span>
+            </button>
+            <button
+              onClick={() => setViewMode('dag')}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg transition-all text-xs font-medium ${
+                viewMode === 'dag'
+                  ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Network className="w-3.5 h-3.5" />
+              <span>DAG Tree</span>
+            </button>
+          </div>
+
           {onOpenCompare && (
             <button
               onClick={onOpenCompare}
-              className="h-10 px-4 rounded-xl text-sm font-mono font-bold flex items-center gap-2.5 transition-all flex-shrink-0 cursor-pointer"
-              style={{ backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}
+              className="h-8 sm:h-9 px-3 rounded-xl text-xs font-mono font-bold flex items-center gap-2 transition-all flex-shrink-0 cursor-pointer bg-slate-800/80 border border-slate-700/80 text-slate-200 hover:text-white hover:border-slate-600"
             >
-              <GitCompare className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-              <span>Compare Stations</span>
+              <GitCompare className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden sm:inline">Compare Stations</span>
+              <span className="sm:hidden">Compare</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* ── GRAPH CANVAS ── */}
-      <div ref={containerRef} className="relative w-full overflow-hidden">
-        <div
-          className="relative mt-2 py-3 rounded-2xl flex justify-center items-start overflow-hidden transition-all duration-200"
-          style={{
-            backgroundColor: 'var(--bg-elevated)',
-            border: '1px solid var(--border)',
-            height: `${Math.round(980 * scale + 24)}px`,
-          }}
-        >
+      {/* ── RESPONSIVE VIEW: CARDS GRID (Touch-friendly & highly legible on all devices) ── */}
+      {viewMode === 'cards' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 mt-2">
+          {TREE_NODES.map((node) => {
+            const t = (domainData && domainData[node.id]) || (fallbackData as any)[node.id];
+            return (
+              <OperationalDomainCard
+                key={node.id}
+                node={node}
+                data={t}
+                stationId={currentStationId}
+                isSelected={selectedDomainId === node.id}
+                showFooterButtons={true}
+                onClick={() => navigate(`/station/${currentStationId}/${node.route}`)}
+                onSelectDomain={onSelectDomain}
+                className="w-full min-h-[240px] shadow-sm hover:shadow-md transition-shadow"
+              />
+            );
+          })}
+        </div>
+      ) : (
+        /* ── GRAPH CANVAS (Full Scaled DAG with SVG conduits) ── */
+        <div ref={containerRef} className="relative w-full overflow-hidden">
           <div
-            className="w-[1420px] h-[980px] relative flex-shrink-0"
+            className="relative mt-2 py-3 rounded-2xl flex justify-center items-start overflow-x-auto transition-all duration-200"
             style={{
-              transform: `scale(${scale})`,
-              transformOrigin: 'top center',
+              backgroundColor: 'var(--bg-elevated)',
+              border: '1px solid var(--border)',
+              height: `${Math.round(980 * scale + 24)}px`,
             }}
           >
-            {/* ── HTML NODE CARDS: RICH OPERATIONAL DOMAIN INSTRUMENTS ── */}
-            {TREE_NODES.map((node) => {
-              const t = (domainData && domainData[node.id]) || (fallbackData as any)[node.id];
-              const isHovered = hoveredNodeId === node.id;
+            <div
+              className="w-[1420px] h-[980px] relative flex-shrink-0"
+              style={{
+                transform: `scale(${scale})`,
+                transformOrigin: 'top center',
+              }}
+            >
+              {/* ── HTML NODE CARDS: RICH OPERATIONAL DOMAIN INSTRUMENTS ── */}
+              {TREE_NODES.map((node) => {
+                const t = (domainData && domainData[node.id]) || (fallbackData as any)[node.id];
+                const isHovered = hoveredNodeId === node.id;
               const isUpstream = Boolean(hoveredNodeId && activeIncomingEdges.some((e) => e.from === node.id));
               const isDownstream = Boolean(hoveredNodeId && activeOutgoingEdges.some((e) => e.to === node.id));
               const isDimmed = Boolean(hoveredNodeId && !isHovered && !isUpstream && !isDownstream);
@@ -717,10 +772,10 @@ export const CrossDomainCausalTree: React.FC<Props> = ({
             </svg>
           </div>
         </div>
-
       </div>
-    </div>
-  );
+    )}
+  </div>
+);
 };
 
 export default CrossDomainCausalTree;

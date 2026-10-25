@@ -307,7 +307,7 @@ const PolarVoyageOcean: React.FC<{
           <svg
             viewBox="0 0 1000 440"
             className="relative w-full select-none"
-            style={{ height: '420px', display: 'block' }}
+            style={{ width: '100%', height: 'auto', maxHeight: '420px', aspectRatio: '1000/440', display: 'block' }}
           >
             <defs>
               <filter id="pvRouteGlow" x="-30%" y="-30%" width="160%" height="160%">
