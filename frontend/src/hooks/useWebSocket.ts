@@ -3,7 +3,7 @@ import { useTelemetryStore } from '../store/telemetryStore';
 import { useAlertStore } from '../store/alertStore';
 import { telemetryApi, riskApi } from '../api/client';
 
-const WS_BASE = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000';
+const WS_BASE = import.meta.env.VITE_WS_BASE_URL || 'wss://polartwin-backend.onrender.com';
 
 /** Retrieve the JWT that the auth layer stored after login. */
 function getAuthToken(): string {
