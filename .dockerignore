@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.Python
+env/
+venv/
+.venv/
+.git/
+.gitignore
+.pytest_cache/
+tests/
+polartwin.db-shm
+polartwin.db-wal
+frontend/node_modules/
+frontend/dist/
+.env
+.DS_Store
